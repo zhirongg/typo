@@ -466,4 +466,14 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
+
+	def merge_with(other_article_id)
+		@article = Article.find(other_article_id)
+		@merged = Article.create!()
+		@merged.content_fields[:body] = self.content_fields[:body] + @article.content_fields[:body]
+		@merged.content_fields[:extended] = self.content_fields[:extended] + @article.content_fields[:extended]
+		return @merged
+		#what is comments? and feedback?
+	end
+
 end
