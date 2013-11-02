@@ -416,6 +416,47 @@ class Article < Content
     user.admin? || user_id == user.id
   end
 
+	def merge_with(other_article_id)
+		otherarticle = Article.find(other_article_id)
+		if otherarticle != nil
+			merged = Article.new(:title => self.title,
+				                    :author => self.author,
+				                    :body => self.body + otherarticle.body,
+				                    :user_id => self.user_id,
+				                    :published => true,
+				                    :allow_comments => true)
+      merged.save()
+
+			other_articles_comments = Feedback.find_all_by_article_id(other_article_id)
+			this_articles_comments = Feedback.find_all_by_article_id(self.id)
+
+			puts other_articles_comments
+			puts this_articles_comments
+
+		  unless other_articles_comments.blank?
+		    other_articles_comments.each do |comment|
+		      comment.article_id = merged.id
+		      comment.save
+		    end
+		  end
+
+		  unless this_articles_comments.blank?
+		    this_articles_comments.each do |comment|
+		      comment.article_id = merged.id
+		      comment.save
+		    end
+		  end
+			
+			Article.destroy(other_article_id)
+			Article.destroy(self.id)
+			return merged
+			#isAdmin? in user model. set equal to currUserAdmin?
+			#don't show merge form unless user is admin.
+		else
+			return self
+		end
+	end
+
   protected
 
   def set_published_at
@@ -466,18 +507,5 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
-
-	def merge_with(other_article_id)
-		@article = Article.find(other_article_id)
-		@merged = Article.create!()
-		@merged.content_fields[:body] = self.content_fields[:body] + @article.content_fields[:body]
-
-		other_articles_comments = Feedback.find(other_article_id)
-
-		Article.destroy(other_article_id)
-		return @merged
-		#isAdmin? in user model. set equal to currUserAdmin?
-		#don't show merge form unless user is admin.
-	end
 
 end

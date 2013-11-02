@@ -11,6 +11,16 @@ class Admin::ContentController < Admin::BaseController
     render :inline => "<%= raw auto_complete_result @items, 'name' %>"
   end
 
+	def mergewith
+		if current_user.admin?
+			#params[:article_id] ||= 7
+			article = Article.find_by_id(params[:article_id])
+			article.merge_with(params[:merge_with])
+			redirect_to '/admin/content'
+			#check for sad path in model
+		end
+	end
+
   def index
     @search = params[:search] ? params[:search] : {}
     
@@ -189,6 +199,8 @@ class Admin::ContentController < Admin::BaseController
       flash[:notice] = _('Article was successfully created')
     when 'edit'
       flash[:notice] = _('Article was successfully updated.')
+    when 'mergewith'
+      flash[:notice] = _('Articles were successfully merged.')
     else
       raise "I don't know how to tidy up action: #{params[:action]}"
     end
