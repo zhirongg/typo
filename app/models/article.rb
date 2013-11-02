@@ -471,9 +471,13 @@ class Article < Content
 		@article = Article.find(other_article_id)
 		@merged = Article.create!()
 		@merged.content_fields[:body] = self.content_fields[:body] + @article.content_fields[:body]
-		@merged.content_fields[:extended] = self.content_fields[:extended] + @article.content_fields[:extended]
+
+		other_articles_comments = Feedback.find(other_article_id)
+
+		Article.destroy(other_article_id)
 		return @merged
-		#what is comments? and feedback?
+		#isAdmin? in user model. set equal to currUserAdmin?
+		#don't show merge form unless user is admin.
 	end
 
 end
