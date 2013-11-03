@@ -19,7 +19,7 @@ end
 When /^I am logged into the admin panel as "(.*)"$/ do |login|
   visit '/accounts/login'
   fill_in 'user_login', :with => login
-  fill_in 'user_password', :with => login + "_pw"
+  fill_in 'user_password', :with => login + "-pw123"
   click_button 'Login'
   if page.respond_to? :should
     page.should have_content('Login successful')
@@ -28,11 +28,15 @@ When /^I am logged into the admin panel as "(.*)"$/ do |login|
   end
 end
 
-When /^I (re)?visit the the edit page for "(.*)"$/ do |re, title|
+When /^"(.*)" should exist in the body of "(.*)"$/ do |content, title|
+	Article.find_by_title(title).body.include?(content)
+end
+
+When /^I visit the the edit page for "(.*)"$/ do |title|
   visit 'admin/content/edit/' + Article.find_by_title(title).id.to_s
 end
 
-When /^I (re)?visit the the show page for "(.*)"$/ do |re, title|
+When /^I visit the the show page for "(.*)"$/ do |title|
   visit 'admin/content/' + Article.find_by_title(title).created_at.to_s + title.gsub('','-')
 end
 

@@ -430,20 +430,20 @@ class Article < Content
 			other_articles_comments = Feedback.find_all_by_article_id(other_article_id)
 			this_articles_comments = Feedback.find_all_by_article_id(self.id)
 
-			puts other_articles_comments
-			puts this_articles_comments
+			#puts other_articles_comments
+			#puts this_articles_comments
 
 		  unless other_articles_comments.blank?
 		    other_articles_comments.each do |comment|
 		      comment.article_id = merged.id
-		      comment.save
+		      comment.save()
 		    end
 		  end
 
 		  unless this_articles_comments.blank?
 		    this_articles_comments.each do |comment|
 		      comment.article_id = merged.id
-		      comment.save
+		      comment.save()
 		    end
 		  end
 			
