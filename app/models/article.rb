@@ -433,19 +433,15 @@ class Article < Content
 			#puts other_articles_comments
 			#puts this_articles_comments
 
-		  unless other_articles_comments.blank?
-		    other_articles_comments.each do |comment|
-		      comment.article_id = merged.id
-		      comment.save()
-		    end
-		  end
+	    other_articles_comments.each do |comment|
+	      comment.article_id = merged.id
+	      comment.save()
+	    end
 
-		  unless this_articles_comments.blank?
-		    this_articles_comments.each do |comment|
-		      comment.article_id = merged.id
-		      comment.save()
-		    end
-		  end
+	    this_articles_comments.each do |comment|
+	      comment.article_id = merged.id
+	      comment.save()
+	    end
 			
 			Article.destroy(other_article_id)
 			Article.destroy(self.id)

@@ -5,12 +5,14 @@
 
 <% end %>
 
-<div class='merge'>
-  <h4><%= _("Merge Articles") %></h4>
-	<%= form_tag '/admin/content/mergewith' do %>
-	<%= label_tag 'article_id', 'Article ID' %>
-	<%= text_field_tag 'merge_with' %>
-	<%= hidden_field_tag :article_id, @article.id %>
-	<%= submit_tag 'Merge' %>
-	<% end %>
-</div>
+<% if current_user.admin? %>
+	<div class='merge'>
+		<h4><%= _("Merge Articles") %></h4>
+		<%= form_tag '/admin/content/mergewith' do %>
+		<%= label_tag 'article_id', 'Article ID' %>
+		<%= text_field_tag 'merge_with' %>
+		<%= hidden_field_tag :article_id, @article.id %>
+		<%= submit_tag 'Merge' %>
+		<% end %>
+	</div>
+<% end %>
